@@ -1,4 +1,5 @@
-/** @mainpage frei0r - a minimalistic plugin API for video effects
+/** @mainpage frei0r - a minimalistic plugin
+ * API for video effects
  *
  * @section sec_intro Introduction
  *
@@ -12,7 +13,7 @@
  * controlled by parameters.
  *
  * It's our hope that this way these simple effects can be shared between
- * many applications, avoiding their reimplementation by different
+ * many applications, avoiding their re-implementation by different
  * projects.
  *
  * On the other hand, this is not meant as a competing standard to
@@ -26,7 +27,7 @@
  * a look at the <a href="frei0r_8h_source.html">frei0r header</a>,
  * which is quite simple.
  *
- * After that, you might want to look at the 
+ * After that, you might want to look at the
  * <a href="frei0r_8h.html">frei0r functions</a> in more detail.
  *
  * When developing a new frei0r effect, you have to choose
@@ -63,7 +64,6 @@
  *   - added section about \ref concurrency
  */
 
-
 /**
  * \addtogroup pluglocations Plugin Locations
  * @section sec_pluglocations Plugin Locations
@@ -98,7 +98,7 @@
  * installed in system wide directories by placing plugins in their
  * home directory.
  *
- * The order of loading plugins inside each of the directories 
+ * The order of loading plugins inside each of the directories
  * 1, 2, and 3 is not defined.
  *
  * @subsection sec_path FREI0R_PATH Environment Variable
@@ -151,9 +151,9 @@
  * \<icon_path\> can be obtained in the following way:
  *
  * @verbatim
-  <plugin_path>                   |     <icon_path>                   
+  <plugin_path>                   |     <icon_path>
  ----------------------------------------------------------------------------
- $HOME/.frei0r-1/lib/<vendor>     | $HOME/.frei0r-1/icons/<vendor>    
+ $HOME/.frei0r-1/lib/<vendor>     | $HOME/.frei0r-1/icons/<vendor>
  /usr/local/lib/frei0r-1/<vendor> | /usr/local/share/frei0r-1/icons/<vendor>
  /usr/lib/frei0r-1/<vendor>       | /usr/share/frei0r-1/icons/<vendor>
           *                       | <plugin_path>
@@ -191,10 +191,8 @@
  *
  * If a thread is in one of these methods its allowed for another thread to
  * enter one of theses methods for a different effect instance. But for one
- * effect instance only one thread is allowed to execute any of these methods. 
+ * effect instance only one thread is allowed to execute any of these methods.
  */
-
-
 
 /** \file
  * \brief This file defines the frei0r api, version 1.2.
@@ -259,25 +257,23 @@ void f0r_deinit(void);
 /** \addtogroup COLOR_MODEL Color Models
  * List of supported color models.
  *
- * Note: the color models are endian independent, because the
- * color components are defined by their positon in memory, not
- * by their significance in an uint32_t value.
- * 
- * For effects that work on the color components,
- * RGBA8888 is the recommended color model for frei0r-1.2 effects.
- * For effects that only work on pixels, PACKED32 is the recommended
- * color model since it helps the application to avoid unnecessary
- * color conversions.
+ * Note: the color models are endian independent, because the color components
+ * are defined by their position in memory, not by their significance in an
+ * uint32_t value.
  *
- * Effects can choose an appropriate color model, applications must support
- * all color models and do conversions if necessary. Source effects
- * must not use the PACKED32 color model because the application must know
- * in which color model the created framebuffers are represented.
+ * For effects that work on the color components, RGBA8888 is the recommended
+ * color model for frei0r-1.2 effects. For effects that only work on pixels,
+ * PACKED32 is the recommended color model since it helps the application to
+ * avoid unnecessary color conversions.
  *
- * For each color model, a frame consists of width*height pixels which
- * are stored row-wise and consecutively in memory. The size of a pixel is
- * 4 bytes. There is no extra pitch parameter
- * (i.e. the pitch is simply width*4).
+ * Effects can choose an appropriate color model, applications must support all
+ * color models and do conversions if necessary. Source effects must not use the
+ * PACKED32 color model because the application must know in which color model
+ * the created framebuffers are represented.
+ *
+ * For each color model, a frame consists of width*height pixels which are
+ * stored row-wise and consecutively in memory. The size of a pixel is 4 bytes.
+ * There is no extra pitch parameter (i.e. the pitch is simply width*4).
  *
  * The following additional constraints must be honored:
  *   - The top-most line of a frame is stored first in memory.
@@ -285,37 +281,34 @@ void f0r_deinit(void);
  *   - The width and height of a frame must be positive
  *   - The width and height of a frame must be integer multiples of 8
  *
- * These constraints make sure that each line is stored at an address aligned
- * to 16 byte.
+ * These constraints make sure that each line is stored at an address aligned to
+ * 16 byte.
  */
 /*@{*/
 /**
- * In BGRA8888, each pixel is represented by 4 consecutive
- * unsigned bytes, where the first byte value represents
- * the blue, the second the green, and the third the red color
- * component of the pixel. The last value represents the
- * alpha value.
+ * In BGRA8888, each pixel is represented by 4 consecutive unsigned bytes, where
+ * the first byte value represents the blue, the second the green, and the third
+ * the red color component of the pixel. The last value represents the alpha
+ * value.
  */
 #define F0R_COLOR_MODEL_BGRA8888 0
 
 /**
- * In RGBA8888, each pixel is represented by 4 consecutive
- * unsigned bytes, where the first byte value represents
- * the red, the second the green, and the third the blue color
- * component of the pixel. The last value represents the
- * alpha value.
+ * In RGBA8888, each pixel is represented by 4 consecutive unsigned bytes, where
+ * the first byte value represents the red, the second the green, and the third
+ * the blue color component of the pixel. The last value represents the alpha
+ * value.
  */
 #define F0R_COLOR_MODEL_RGBA8888 1
 
 /**
- * In PACKED32, each pixel is represented by 4 consecutive
- * bytes, but it is not defined how the color componets are
- * stored. The true color format could be RGBA8888,
- * BGRA8888, a packed 32 bit YUV format, or any other
- * color format that stores pixels in 32 bit.
+ * In PACKED32, each pixel is represented by 4 consecutive bytes, but it is not
+ * defined how the color components are stored. The true color format could be
+ * RGBA8888, BGRA8888, a packed 32 bit YUV format, or any other color format
+ * that stores pixels in 32 bit.
  *
- * This is useful for effects that don't work on color but
- * only on pixels (for example a mirror effect).
+ * This is useful for effects that don't work on color but only on pixels (for
+ * example a mirror effect).
  *
  * Note that source effects must not use this color model.
  */
@@ -323,44 +316,40 @@ void f0r_deinit(void);
 /*@}*/
 
 /**
- * The f0r_plugin_info_t structure is filled in by the plugin
- * to tell the application about its name, type, number of parameters,
- * and version. 
+ * The f0r_plugin_info_t structure is filled in by the plugin to tell the
+ * application about its name, type, number of parameters, and version.
  *
- * An application should ignore (i.e. not use) frei0r effects that
- * have unknown values in the plugin_type or color_model field.
- * It should also ignore effects with a too high frei0r_version.
+ * An application should ignore (i.e. not use) frei0r effects that have unknown
+ * values in the plugin_type or color_model field. It should also ignore effects
+ * with a too high frei0r_version.
  *
- * This is necessary to be able to extend the frei0r spec (e.g.
- * by adding new color models or plugin types) in a way that does not
- * result in crashes when loading effects that make use of these
- * extensions into an older application.
+ * This is necessary to be able to extend the frei0r spec (e.g. by adding new
+ * color models or plugin types) in a way that does not result in crashes when
+ * loading effects that make use of these extensions into an older application.
  *
  * All strings are unicode, 0-terminated, and the encoding is utf-8.
  */
-typedef struct f0r_plugin_info
-{
-  const char* name;    /**< The (short) name of the plugin                   */
-  const char* author;  /**< The plugin author                                */
+typedef struct f0r_plugin_info {
+  const char *name;   /**< The (short) name of the plugin                   */
+  const char *author; /**< The plugin author                                */
   /** The plugin type
    * \see PLUGIN_TYPE
    */
-  int plugin_type;    
-  int color_model;     /**< The color model used                             */
-  int frei0r_version;  /**< The frei0r major version this plugin is built for*/
-  int major_version;   /**< The major version of the plugin                  */
-  int minor_version;   /**< The minor version of the plugin                  */
-  int num_params;      /**< The number of parameters of the plugin           */
-  const char* explanation; /**< An optional explanation string               */
+  int plugin_type;
+  int color_model;    /**< The color model used                             */
+  int frei0r_version; /**< The frei0r major version this plugin is built for*/
+  int major_version;  /**< The major version of the plugin                  */
+  int minor_version;  /**< The minor version of the plugin                  */
+  int num_params;     /**< The number of parameters of the plugin           */
+  const char *explanation; /**< An optional explanation string              */
 } f0r_plugin_info_t;
-
 
 /**
  * Is called once after init. The plugin has to fill in the values in info.
  *
  * \param info Pointer to an info struct allocated by the application.
  */
-void f0r_get_plugin_info(f0r_plugin_info_t* info);
+void f0r_get_plugin_info(f0r_plugin_info_t *info);
 
 //---------------------------------------------------------------------------
 
@@ -369,39 +358,38 @@ void f0r_get_plugin_info(f0r_plugin_info_t* info);
  *  @{
  */
 
-
 /**
  * Parameter type for boolean values
  * \see f0r_param_bool
  */
-#define F0R_PARAM_BOOL      0
+#define F0R_PARAM_BOOL 0
 
 /**
  * Parameter type for doubles
  * \see f0r_param_double
  */
-#define F0R_PARAM_DOUBLE    1
+#define F0R_PARAM_DOUBLE 1
 
 /**
  * Parameter type for color
  * \see f0r_param_color
  */
-#define F0R_PARAM_COLOR     2
+#define F0R_PARAM_COLOR 2
 /**
  * Parameter type for position
  * \see f0r_param_position
  */
-#define F0R_PARAM_POSITION  3
+#define F0R_PARAM_POSITION 3
 
 /**
  * Parameter type for string
  * \see f0r_param_string
  */
-#define F0R_PARAM_STRING  4
+#define F0R_PARAM_STRING 4
 
 /**
  * The boolean type. The allowed range of values is [0, 1].
- * [0, 0.5[ is mapped to false and [0.5, 1] is mapped to true.
+ * [0, 0.5] is mapped to false and [0.5, 1] is mapped to true.
  */
 typedef double f0r_param_bool;
 
@@ -413,8 +401,7 @@ typedef double f0r_param_double;
 /**
  * The color type. All three color components are in the range [0, 1].
  */
-typedef struct f0r_param_color
-{
+typedef struct f0r_param_color {
   float r; /**< red color component */
   float g; /**< green color component */
   float b; /**< blue color component */
@@ -423,33 +410,29 @@ typedef struct f0r_param_color
 /**
  * The position type. Both position coordinates are in the range [0, 1].
  */
-typedef struct f0r_param_position
-{
+typedef struct f0r_param_position {
   double x; /**< x coordinate */
   double y; /**< y coordinate */
 } f0r_param_position_t;
 
-
 /**
- * The string type. 
+ * The string type.
  * Zero terminated array of 8-bit values in utf-8 encoding
  */
-typedef char* f0r_param_string;
+typedef char *f0r_param_string;
 
 /**  @} */
 
-
 /**
- * Similar to f0r_plugin_info_t, this structure is filled by the plugin
- * for every parameter.
+ * Similar to f0r_plugin_info_t, this structure is filled by the plugin for
+ * every parameter.
  *
  * All strings are unicode, 0-terminated, and the encoding is utf-8.
  */
-typedef struct f0r_param_info
-{
-  const char* name;         /**<The (short) name of the param */
-  int type;                 /**<The type (see the F0R_PARAM_* defines) */
-  const char* explanation;  /**<Optional explanation (can be 0) */
+typedef struct f0r_param_info {
+  const char *name;        /**<The (short) name of the param */
+  int type;                /**<The type (see the F0R_PARAM_* defines) */
+  const char *explanation; /**<Optional explanation (can be 0) */
 } f0r_param_info_t;
 
 /**
@@ -460,22 +443,22 @@ typedef struct f0r_param_info
  * \param param_index the index of the parameter to be queried (from 0 to
  *   num_params-1)
  */
-void f0r_get_param_info(f0r_param_info_t* info, int param_index);
+void f0r_get_param_info(f0r_param_info_t *info, int param_index);
 
 //---------------------------------------------------------------------------
 
 /**
  * Transparent instance pointer of the frei0r effect.
  */
-typedef void* f0r_instance_t;
+typedef void *f0r_instance_t;
 
 /**
- * Constructor for effect instances. The plugin returns a pointer to
- * its internal instance structure.
+ * Constructor for effect instances. The plugin returns a pointer to its
+ * internal instance structure.
  *
- * The resolution must be an integer multiple of 8,
- * must be greater than 0 and be at most 2048 in both dimensions.
- * The plugin must set default values for all parameters in this function.
+ * The resolution must be an integer multiple of 8, must be greater than 0 and
+ * be at most 2048 in both dimensions. The plugin must set default values for
+ * all parameters in this function.
  *
  * \param width The x-resolution of the processed video frames
  * \param height The y-resolution of the processed video frames
@@ -499,25 +482,25 @@ void f0r_destruct(f0r_instance_t instance);
 /**
  * Transparent parameter handle.
  */
-typedef void* f0r_param_t;
+typedef void *f0r_param_t;
 
 /**
- * This function allows the application to set the parameter values of an
- * effect instance. Validity of the parameter pointer is handled by the
- * application thus the data must be copied by the effect.
+ * This function allows the application to set the parameter values of an effect
+ * instance. Validity of the parameter pointer is handled by the application
+ * thus the data must be copied by the effect.
  *
- * If the parameter type is of F0R_PARAM_STRING, then the caller should
- * supply a pointer to f0r_param_string (char**). The plugin must copy
- * copy the string and not assume it exists beyond the lifetime of the call.
- * The reason a double pointer is requested when only a single is really
- * needed is simply for API consistency.
+ * If the parameter type is of F0R_PARAM_STRING, then the caller should supply a
+ * pointer to f0r_param_string (char**). The plugin must copy copy the string
+ * and not assume it exists beyond the lifetime of the call. The reason a double
+ * pointer is requested when only a single is really needed is simply for API
+ * consistency.
  *
- * Furthermore, if an update event/signal is needed in a host
- * application to notice when parameters have changed, this should be
- * implemented inside its own update() call. The host application
- * would presumably need to store the current value as well to see if
- * it changes; to make this thread safe, it should store a copy of the
- * current value in a struct which uses instance as a key.
+ * Furthermore, if an update event/signal is needed in a host application to
+ * notice when parameters have changed, this should be implemented inside its
+ * own update() call. The host application would presumably need to store the
+ * current value as well to see if it changes; to make this thread safe, it
+ * should store a copy of the current value in a struct which uses instance as a
+ * key.
  *
  * \param instance the effect instance
  * \param param pointer to the parameter value
@@ -525,58 +508,56 @@ typedef void* f0r_param_t;
  *
  * \see f0r_get_param_value
  */
-void f0r_set_param_value(f0r_instance_t instance, 
-			 f0r_param_t param, int param_index);
+void f0r_set_param_value(f0r_instance_t instance, f0r_param_t param,
+                         int param_index);
 
 /**
  * This function allows the application to query the parameter values of an
  * effect instance.
  *
- * If the parameter type is of F0R_PARAM_STRING, then the caller should
- * supply a pointer to f0r_param_string (char**). The plugin sets the
- * pointer to the address of its copy of the parameter value. Therefore,
- * the caller should not free the result. If the caller needs to modify
- * the value, it should make a copy of it and modify before calling
- * f0r_set_param_value().
+ * If the parameter type is of F0R_PARAM_STRING, then the caller should supply a
+ * pointer to f0r_param_string (char**). The plugin sets the pointer to the
+ * address of its copy of the parameter value. Therefore, the caller should not
+ * free the result. If the caller needs to modify the value, it should make a
+ * copy of it and modify before calling f0r_set_param_value().
  *
  * \param instance the effect instance
  * \param param pointer to the parameter value
  * \param param_index index of the parameter
  *
-  * \see f0r_set_param_value
+ * \see f0r_set_param_value
  */
-void f0r_get_param_value(f0r_instance_t instance,
-			 f0r_param_t param, int param_index);
+void f0r_get_param_value(f0r_instance_t instance, f0r_param_t param,
+                         int param_index);
 
 //---------------------------------------------------------------------------
 
 /**
  * This is where the core effect processing happens. The application calls it
- * after it has set the necessary parameter values.
- * inframe and outframe must be aligned to an integer multiple of 16 bytes
- * in memory.
+ * after it has set the necessary parameter values. inframe and outframe must be
+ * aligned to an integer multiple of 16 bytes in memory.
  *
- * This function should not alter the parameters of the effect in any
- * way (\ref f0r_get_param_value should return the same values after a call
- * to \ref f0r_update as before the call).
+ * This function should not alter the parameters of the effect in any way (\ref
+ * f0r_get_param_value should return the same values after a call to \ref
+ * f0r_update as before the call).
  *
- * The function is responsible to restore the fpu state (e.g. rounding mode)
- * and mmx state if applicable before it returns to the caller.
+ * The function is responsible to restore the fpu state (e.g. rounding mode) and
+ * mmx state if applicable before it returns to the caller.
  *
- * The host mustn't call \ref f0r_update for effects of type
- * \ref F0R_PLUGIN_TYPE_MIXER2 and \ref F0R_PLUGIN_TYPE_MIXER3.
+ * The host mustn't call \ref f0r_update for effects of type \ref
+ * F0R_PLUGIN_TYPE_MIXER2 and \ref F0R_PLUGIN_TYPE_MIXER3.
  *
  * \param instance the effect instance
  * \param time the application time in seconds but with subsecond resolution
- *        (e.g. milli-second resolution). The resolution should be at least
- *        the inter-frame period of the application.
- * \param inframe the incoming video frame (can be zero for sources)
+ *        (e.g. milli-second resolution). The resolution should be at least the
+ *        inter-frame period of the application. \param inframe the incoming
+ *        video frame (can be zero for sources)
  * \param outframe the resulting video frame
  *
  * \see f0r_update2
  */
-void f0r_update(f0r_instance_t instance, 
-		double time, const uint32_t* inframe, uint32_t* outframe);
+void f0r_update(f0r_instance_t instance, double time, const uint32_t *inframe,
+                uint32_t *outframe);
 
 //---------------------------------------------------------------------------
 
@@ -586,27 +567,24 @@ void f0r_update(f0r_instance_t instance,
  * method must still be exported for these two effect types. If both are
  * provided the behavior of them must be the same.
  *
- * Effects of type \ref F0R_PLUGIN_TYPE_MIXER2 or \ref F0R_PLUGIN_TYPE_MIXER3 must provide the new \ref f0r_update2 method.
-
+ * Effects of type \ref F0R_PLUGIN_TYPE_MIXER2 or \ref F0R_PLUGIN_TYPE_MIXER3
+ * must provide the new \ref f0r_update2 method.
  * \param instance the effect instance
  * \param time the application time in seconds but with subsecond resolution
  *        (e.g. milli-second resolution). The resolution should be at least
  *        the inter-frame period of the application.
  * \param inframe1 the first incoming video frame (can be zero for sources)
- * \param inframe2 the second incoming video frame
-          (can be zero for sources and filters)
- * \param inframe3 the third incoming video frame
-          (can be zero for sources, filters and mixer2) 
+ * \param inframe2 the second incoming video frame (can be zero for sources and
+          filters)
+ * \param inframe3 the third incoming video frame (can be zero for sources,
+          filters and mixer2)
  * \param outframe the resulting video frame
  *
  * \see f0r_update
  */
-void f0r_update2(f0r_instance_t instance,
-		 double time,
-		 const uint32_t* inframe1,
-		 const uint32_t* inframe2,
-		 const uint32_t* inframe3,
-		 uint32_t* outframe);
+void f0r_update2(f0r_instance_t instance, double time, const uint32_t *inframe1,
+                 const uint32_t *inframe2, const uint32_t *inframe3,
+                 uint32_t *outframe);
 //---------------------------------------------------------------------------
 
 #endif
