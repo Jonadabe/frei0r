@@ -1,4 +1,5 @@
 .envrc
+.cache
 gallery
 aclocal.m4
 autom4te.cache
